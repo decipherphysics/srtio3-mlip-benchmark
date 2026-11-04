@@ -155,4 +155,7 @@ bash setup_mac.sh                                          # environments and mo
 
 The code is under the MIT licence, and the DFT data and results under CC BY 4.0.
 
-Author: Alexander Lione
+## Author
+
+Alexander Lione. The DFT calculations are from my PhD. Claude (Anthropic) was used in preparing this work, to write
+the code and the text.
