@@ -1,0 +1,9 @@
+# MatterSim (Microsoft). Needs Python >= 3.12.
+mattersim
+numpy
+scipy
+ase>=3.23
+phonopy
+spglib
+pandas
+matplotlib

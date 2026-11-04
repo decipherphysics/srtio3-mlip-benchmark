@@ -1,0 +1,9 @@
+# SevenNet (Seoul National University)
+sevenn
+numpy
+scipy
+ase>=3.23
+phonopy
+spglib
+pandas
+matplotlib

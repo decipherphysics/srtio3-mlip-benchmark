@@ -1,0 +1,26 @@
+__pycache__/
+*.pyc
+.DS_Store
+.pytest_cache/
+logs/
+
+# raw VASP runs (POTCARs must never be published)
+vasp_STO_runs/
+unused_runs/
+
+# list of runs from 00_audit.py, holds local file paths
+data/audit.csv
+
+# older and unused results
+results/relax/old_*/
+results/singlepoints/
+results/smoke/
+results/finetune/
+
+# fine-tuning, not part of this study
+notebooks/
+models/
+
+# notes
+HANDOFF.md
+PLAN_phase_diagram.md

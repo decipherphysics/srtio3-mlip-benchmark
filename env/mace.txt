@@ -1,0 +1,10 @@
+# MACE foundation models (MP-0b3, MPA-0, OMAT-0, MatPES, MH-1). Also used for tests and figures.
+mace-torch
+numpy
+scipy
+ase>=3.23
+phonopy
+spglib
+pandas
+matplotlib
+pytest

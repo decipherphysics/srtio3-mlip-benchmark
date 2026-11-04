@@ -1,0 +1,9 @@
+# Orb v3 (Orbital Materials)
+orb-models
+numpy
+scipy
+ase>=3.23
+phonopy
+spglib
+pandas
+matplotlib

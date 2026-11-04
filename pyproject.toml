@@ -1,0 +1,10 @@
+[project]
+name = "srtio3-mlip-benchmark"
+version = "0.1.0"
+description = "Strain-induced ferroelectricity in SrTiO3: a test of foundation ML interatomic potentials"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Alexander Lione" }]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

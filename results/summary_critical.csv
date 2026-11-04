@@ -1,0 +1,13 @@
+model,orientation,functional,dataset,a0_model,critical_compressive_pct,critical_tensile_pct,critical_compressive_2meV_pct,critical_tensile_2meV_pct,strain_range_pct
+chgnet-0.3,001,PBE,MPtrj,3.9438626847796865,0.0,0.0,1.274,1.29,-5.121 to +5.136
+mace-matpes-pbe-0,001,PBE,MatPES (PBE),3.9351420782035067,0.0,0.0,0.0,0.0,-5.121 to +5.136
+mace-matpes-r2scan-0,001,r2SCAN,MatPES (r2SCAN),3.899619535226391,2.557,1.29,2.557,1.29,-5.121 to +5.136
+mace-mh-1-omat,001,PBE,"MH-1, omat_pbe head",3.9474433455666724,0.0,0.0,0.0,0.0,-5.121 to +5.136
+mace-mh-1-r2scan,001,r2SCAN,"MH-1, matpes_r2scan head",3.9182767914555923,0.0,0.0,1.274,1.29,-5.121 to +5.136
+mace-mp-0b3,001,PBE,MPtrj,3.9424286860611404,0.0,0.0,0.0,0.0,-5.121 to +5.136
+mace-mpa-0,001,PBE,MPtrj + sAlex,3.943304762737989,0.0,0.0,0.0,0.0,-5.121 to +5.136
+mace-omat-0,001,PBE,OMat24,3.939729937626235,0.0,0.0,0.0,0.0,-5.121 to +5.136
+mattersim-5m,001,PBE,"MatterSim (proprietary, PBE)",3.9435842008995006,0.0,0.0,0.0,0.0,-5.121 to +5.136
+orb-v3-omat,001,PBE,OMat24,3.9435561653259983,0.0,0.0,0.0,0.0,-5.121 to +5.136
+sevennet-mf-ompa,001,PBE,OMat24 + sAlex + MPtrj (mpa modal),3.9444441019768126,0.0,0.0,0.0,0.0,-5.121 to +5.136
+DFT (PBEsol),001,,,,0.0,0.0,2.557,1.29,
