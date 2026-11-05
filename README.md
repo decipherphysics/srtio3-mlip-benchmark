@@ -3,6 +3,26 @@
 This repository compares 11 foundation machine learned interatomic potentials (MLIPs) with DFT calculations from my
 PhD, for SrTiO3 (STO) under [001] epitaxial strain. All calculations are at 0 K.
 
+## Summary
+
+![Polar energy lowering of unstrained STO for each model and DFT](figures/fig0_summary_001.png)
+
+Polar energy lowering of unstrained STO (the lowest non-polar phase minus the lowest polar phase), each model at its
+own cubic lattice parameter, against DFT (black line). The dash-dot line marks 2 meV/f.u., the estimated scale of
+quantum fluctuations.
+
+1. Most of the models trained on PBE data make STO far too polar. Without strain, 8 of the 9 lower their energy by
+   3.6-12.4 meV/f.u. on going polar, compared with 1.2 meV/f.u. in DFT, so they would predict unstrained STO to be
+   ferroelectric.
+2. The functional of the training data matters more than the architecture. The MH-1 MACE model lowers its energy by
+   12.4 meV/f.u. with its PBE head, but only 0.35 meV/f.u. with its r2SCAN head.
+3. Most models still find the DFT phase sequence under strain (I4cm under compression, Cc near zero strain and Ima2
+   under tension), and three of them match DFT at all nine strains.
+4. Two of the relaxed polar ground states were saddle points, which only the phonons revealed.
+
+Since the DFT reference uses PBEsol, part of the excess polarisation of the PBE-trained models may come from PBE itself
+(see Limitations).
+
 ## Background
 
 STO has an extremely flat energy landscape, sitting on the verge of several polar and non-polar phases. In DFT the
@@ -157,5 +177,6 @@ The code is under the MIT licence, and the DFT data and results under CC BY 4.0.
 
 ## Author
 
-Alexander Lione. The DFT calculations are from my PhD. Claude (Anthropic) was used in preparing this work, to write
-the code and the text.
+Alexander Lione ([decipherphysics.com](https://www.decipherphysics.com)). The DFT calculations are from my
+[PhD thesis](https://etheses.durham.ac.uk/id/eprint/16104/) (Durham University, 2025). Claude (Anthropic) was used in
+preparing this work, to write the code and the text.

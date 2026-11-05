@@ -3,6 +3,7 @@
     ~/.sto-envs/mace/bin/python scripts/06_figures.py [--strain-ref own]
 
 Figures (PNG + PDF in figures/):
+  fig0_summary_<o>.*       the headline: polar energy lowering of unstrained STO, one bar per model, DFT as a line
   fig1_gain_<o>.*          polar energy gain vs strain, one panel per model, DFT dashed; log axis above
                            0.1 meV/f.u., with lines at the polar threshold and the quantum-fluctuation scale
   fig2_displacement_<o>.*  uniform Ti displacement of the ground state vs strain
@@ -223,6 +224,39 @@ def small_multiples(pts, dft, orientation, column, ylabel, title, fname, zero_li
 
 
 LINES = {"": config.E_TOL_MEV, "_2meV": config.E_QF_MEV}  # column suffix: polar threshold (meV/f.u.)
+
+
+def fig_summary(pts, dft, orientation):
+    """The headline result: the polar energy lowering of unstrained STO for every model, one bar each, against DFT."""
+    sub = pts[(pts.orientation == orientation) & (pts.strain_pct.abs() < 0.05)].sort_values("gain_mev_per_fu")
+    if sub.empty:
+        return None
+    d = dft[(dft.orientation == orientation) & (dft.strain_pct.abs() < 0.05)] if not dft.empty else dft
+    e_dft = float(d.gain_mev_per_fu.iloc[0]) if not d.empty else np.nan
+    pbe, r2 = C["001"], C["111"]
+    fig, ax = plt.subplots(figsize=(6.6, 0.3 * len(sub) + 1.5))
+    y = np.arange(len(sub))
+    ax.barh(y, sub.gain_mev_per_fu.clip(lower=0), height=0.56, zorder=3,
+            color=[pbe if f == "PBE" else r2 for f in sub.functional])
+    for yi, v in zip(y, sub.gain_mev_per_fu):
+        ax.text(max(v, 0) + 0.15, yi, f"{v:.2f}", va="center", fontsize=8, color=C["ink2"], zorder=5)
+    ax.set_yticks(y, sub.model)
+    ax.tick_params(axis="y", length=0)
+    ax.grid(axis="y", visible=False)
+    ax.set_xlim(0, sub.gain_mev_per_fu.max() * 1.13)
+    ax.set_ylim(-0.6, len(sub) - 0.4)
+    if np.isfinite(e_dft):
+        ax.axvline(e_dft, color=C["ink"], lw=1.4, zorder=4)
+    ax.axvline(config.E_QF_MEV, color=C["muted"], lw=1.0, ls=(0, (5, 2, 1, 2)), zorder=4)
+    ax.set_xlabel("polar energy lowering (meV/f.u.)")
+    ax.set_title("Unstrained STO: lowest non-polar phase minus lowest polar phase", loc="left")
+    handles = [plt.Rectangle((0, 0), 1, 1, color=pbe, label="model trained on PBE data"),
+               plt.Rectangle((0, 0), 1, 1, color=r2, label="model trained on r2SCAN data"),
+               plt.Line2D([], [], color=C["ink"], lw=1.4, label=f"DFT (PBEsol), {e_dft:.2f}"),
+               plt.Line2D([], [], color=C["muted"], lw=1.0, ls=(0, (5, 2, 1, 2)),
+                          label=f"{config.E_QF_MEV:g} meV/f.u.: quantum fluctuations (estimate)")]
+    ax.legend(handles=handles, loc="lower right")
+    return save(fig, f"fig0_summary_{orientation}")
 
 
 def _critical(strains, gains, disps) -> dict:
@@ -461,6 +495,7 @@ def main():
         made.append(small_multiples(pts, dft, o, "tilt", "tilt angle (°)",
                                     "Octahedral tilt of the ground state", f"fig3_tilt_{o}"))
         made.append(fig_phases(pts, dft, o))
+        made.append(fig_summary(pts, dft, o))
     crit = critical_table(pts, dft)
     crit.to_csv(config.RESULTS / "summary_critical.csv", index=False)
     order = {m: i for i, m in enumerate(model_order([m for m in crit.model.unique() if m != "DFT (PBEsol)"]) + ["DFT (PBEsol)"])}
