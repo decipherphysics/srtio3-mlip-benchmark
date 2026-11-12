@@ -1,7 +1,9 @@
 # Foundation MLIPs for strained SrTiO3: a comparison with DFT
 
 This repository compares 11 foundation machine learned interatomic potentials (MLIPs) with DFT calculations from my
-PhD, for SrTiO3 (STO) under [001] epitaxial strain. All calculations are at 0 K.
+PhD, for SrTiO3 (STO) under [001] epitaxial strain. The model closest to DFT (MACE MH-1 with its r2SCAN head) is then
+used for films grown along [111], again compared with DFT, and along [110], where there is no DFT to compare with, so
+those results are a prediction. All calculations are at 0 K.
 
 ## Summary
 
@@ -22,6 +24,20 @@ quantum fluctuations.
 
 Since the DFT reference uses PBEsol, part of the excess polarisation of the PBE-trained models may come from PBE itself
 (see Limitations).
+
+For films grown along other directions, using the best model:
+
+5. The best model also works for [111] strain. It finds the same kind of structure as DFT at all nine strains. Under
+   tensile strain the film becomes polar, with an energy lowering within 4% of DFT. Under compressive strain neither
+   the model nor DFT becomes polar, and the oxygen octahedra only tilt, by 1.0-1.4° less in the model. This matches an
+   earlier DFT study of [111] strained STO.
+6. For [110] strain, where there is no DFT, the model predicts that the film does not become polar under compressive
+   strain (apart from a very weak polarisation at the largest strain), and becomes polar within the film plane under
+   tensile strain, with about half the energy lowering of a [001] film.
+7. The orientation matters because of how the strain changes the Ti-O bonds. Whatever the orientation, the energy
+   lowering on going polar grows roughly with the square of how far the strain lengthens the Ti-O bonds. Compressive
+   [110] and [111] strain shortens every Ti-O bond, so these films stay non-polar, whereas compressive [001] strain
+   lengthens the bonds along the growth direction, so [001] films become polar.
 
 ## Background
 
@@ -113,12 +129,85 @@ compared with DFPT.
 The Ti off-centring and tilt against strain are shown in [fig2](figures/fig2_displacement_001.png) and
 [fig3](figures/fig3_tilt_001.png), and the tables behind the figures are in `results/`.
 
+## Other strain orientations
+
+We then use the model closest to DFT, MH-1 with its r2SCAN head, for films grown along [111] and [110], at the same
+nine strains, again measured from the model's own cubic lattice parameter. At each strain we relax non-polar
+structures with the octahedra untilted or tilted about each distinct high-symmetry axis, start polar relaxations from
+the two lowest, and check the lowest state with Γ-point phonons. For [111] we compare with the [111] DFT relaxations
+from my PhD (PBEsol, 30- and 60-atom cells, several starting structures at each strain), and also relax each final DFT
+structure with the model. For [110] there is no DFT, so these results are a prediction.
+
+### 5. Does the best model also work for [111] strain?
+
+Yes. We find the same kind of structure as DFT at all nine strains (Figure 4). In the compressive regime both are
+non-polar, with the oxygen octahedra tilted about an axis in the film plane. The model tilts them about [1-10] (C2/m)
+and DFT about [11-2] (C2/c), but in the model these two lie within 0.4 meV/f.u. of each other, and no DFT run started
+from the model's axis, so this difference is not settled. Without strain both find the weakly polar R3c phase
+(0.33 meV/f.u. below the lowest non-polar phase, against 0.58 meV/f.u. in DFT). In the tensile regime both find the
+polar Cc phase, with Ti moving mostly within the film plane. The energy lowering is within 4% of DFT at every tensile
+strain (71.1 against 71.5 meV/f.u. at +5.1%) and the Ti off-centring within 0.007 Å. As for [001], the model's tilts
+are smaller than in DFT, by 1.0-1.4° in the compressive regime. None of the model's ground states is a saddle point.
+
+These results agree with an earlier DFT study (Reyes-Lillo, Rabe and Neaton, Phys. Rev. Materials 3, 030601 (2019)),
+which also finds [111] strained STO non-polar under compressive strain and polar, in the Cc phase, under larger
+tensile strain.
+
+### 6. What does the model predict for [110] strain?
+
+In the compressive regime the film is non-polar (Figure 5), with the octahedra tilted about the in-plane [1-10] axis
+(Imma, 4.9-8.4°), apart from a very weak polarisation along the film normal at the largest strain (Imm2, 0.38 meV/f.u.
+at -5.1%). In the tensile regime it becomes polar (Cc), with Ti moving within the film plane at about 40° to [001],
+and an energy lowering about half that of a [001] film at the same strain (84 against 156 meV/f.u. at +5.1%). From the
+[001] and [111] comparisons, we expect the kind of structure to be right, the energy lowering under tensile strain to
+be within about 10% and the tilts up to about 2° too small. Since the model overestimates the energy lowering under
+compressive [001] strain by 30-51%, the weak polarisation at -5.1% may well be absent in DFT.
+
+The only DFT study of [110] strained STO we found (Angsten, Martin and Asta, Phys. Rev. B 95, 174110 (2017)) uses
+five-atom cells, which leave out the octahedral tilts. It also finds polarisation within the film plane under tensile
+strain, but under compressive strain it finds polarisation along the film normal, where we find tilts instead. Since
+the tilts compete with the polarisation, a DFT calculation that includes them is needed to settle this.
+
+### 7. Why does the orientation matter?
+
+Strain changes the lengths of the Ti-O bonds, and Ti moves off centre more easily along a direction in which its bonds
+are longer than in cubic STO. We find that, across all three orientations, the polar energy lowering is close to k
+times the sum of the squares of these lengthenings (the stretch of each TiO6 cage axis that is longer than in cubic
+STO, in %), with k = 2.76 meV/f.u. per %² for DFT and 2.77 for the model, fitted to the [001] films under tensile
+strain only (Figure 6). Compressive [110] and [111] strain shortens every Ti-O bond, so these films stay non-polar,
+while compressive [001] strain lengthens the bonds along the growth direction, so [001] films become polar. Under
+tensile [111] strain each bond lengthens by only about half the strain of the film, so the energy lowering is less
+than half that of [001] (38-47%). For [111] the energy lowering lies between 22% below and 25% above the rule, and for
+[110] within 5% of it. In the compressive [001] regime, however, DFT lies 15-44% below the rule while the model
+follows it to within 11%, which is the likely reason the model overestimates the energy lowering there: in DFT the
+larger octahedral tilts compete with the polarisation.
+
+![Phases of [111] strained STO, model against DFT](figures/fig_phases_111.png)
+
+Figure 4: [111] strain. Ground state phase, polar energy lowering, Ti off-centring and octahedral tilt against strain,
+for the model (solid) and DFT (dashed, open symbols). The off-centring and tilt are split into their parts in the film
+plane and along the film normal.
+
+![Phases of [110] strained STO predicted by the model](figures/fig_phases_110.png)
+
+Figure 5: [110] strain, model only. Ground state phase, polar energy lowering, Ti off-centring and octahedral tilt
+against strain, along the three film axes, with the same model's [001] results for comparison.
+
+![Polar energy lowering against the stretch of the Ti-O bonds](figures/fig_orientation_rule.png)
+
+Figure 6: Polar energy lowering against the sum of the squared stretches of the TiO6 cage axes that are longer than in
+cubic STO, for DFT (left) and the model (middle), with the rule fitted to the [001] films under tensile strain (dashed
+line). Filled symbols are tensile strain and open symbols compressive. Right: the stretch of the three cage axes
+against strain in the model, for each orientation.
+
 ## Limitations
 
 The DFT reference uses PBEsol, while the models are trained on PBE or r2SCAN data, so part of the excess polarisation
 of the PBE-trained models may come from PBE itself rather than from the models, which this comparison cannot separate.
-All calculations are at 0 K, with quantum fluctuations only included through the rough 2 meV/f.u. estimate, and only
-[001] strain is considered, at nine strains 1.3% apart in a 20-atom cell.
+All calculations are at 0 K, with quantum fluctuations only included through the rough 2 meV/f.u. estimate, and the
+[001] comparison uses nine strains 1.3% apart in a 20-atom cell. The [111] and [110] calculations use only the best
+model, and the [110] results have no DFT check. Under compressive [111] strain no DFT run tried the model's tilt axis,
+so which axis DFT prefers is not known.
 
 ## Details
 
@@ -133,6 +222,13 @@ All calculations are at 0 K, with quantum fluctuations only included through the
   or tilt using the STO Born effective charges (Zhong, King-Smith and Vanderbilt, PRL 72, 3618 (1994)) and rigid
   rotations of the octahedra. Polar ground states with an unstable mode are displaced along it and relaxed again to
   0.2 meV/Å.
+- For [111] and [110] strain the cells hold 30 atoms ([1-10] × [01-1] × 2[111], hexagonal) and 20 atoms
+  (2[001] × [1-10] × [110]). The non-polar references (seven for [111], eight for [110]) are relaxed with their
+  symmetry held, and polar relaxations start from the two lowest, with every Ti moved 0.04 Å along six directions.
+  The [111] structures of the model and of DFT are measured in the same way, from the structures themselves
+  (`orientations/111/film_measure.py`), since the DFT cells differ from the model's.
+- The orientation rule uses the three O-O distances across each TiO6 cage, measured in the lowest centrosymmetric
+  state at each strain, as stretches from that method's own cubic lattice parameter.
 
 ## Models
 
@@ -159,6 +255,10 @@ MH-1 weights are for non-commercial use only.
 - `data/`: every ionic step of the 79 VASP runs used (1824 frames, with energies, forces and stresses), and the final
   structure of each run. The raw VASP files are not included.
 - `results/`: all model relaxations and phonon calculations, along with the summary tables behind the figures.
+- `orientations/`: the [111] (`111/`) and [110] (`110/`) calculations with the best model and the orientation rule
+  (`rule/`), each with its scripts, tests, results and tables (`results_111.md`, `results_110.md`, `rule_table.csv`).
+  `orientations/111/dft/` holds the final structures and energies of the 77 [111] VASP runs. The raw VASP files are
+  not included.
 - `sto/` holds the analysis code, `scripts/` the individual steps and `tests/` the unit tests.
 
 To run the calculations again (the DFT space groups in Figure 2 are read from the raw VASP runs):
@@ -168,7 +268,21 @@ bash setup_mac.sh                                          # environments and mo
 ./run.sh scripts/04_strain_relax.py --orientations 001     # relaxations (~2.5 h on an M-series Mac)
 ./run.sh scripts/05_phonons.py --orientations 001          # phonons (~30 min)
 ~/.sto-envs/mace/bin/python scripts/06_figures.py          # figures and tables
-~/.sto-envs/mace/bin/python -m pytest tests                # tests
+~/.sto-envs/mace/bin/python -m pytest tests orientations   # tests
+```
+
+The [111] and [110] calculations and the orientation rule use the `mace` environment only:
+
+```bash
+~/.sto-envs/mace/bin/python orientations/111/scan_111.py              # [111] relaxations (~50 min)
+~/.sto-envs/mace/bin/python orientations/111/dft_seeds_111.py         # DFT structures relaxed with the model (~2 h)
+~/.sto-envs/mace/bin/python orientations/111/phonons_111.py           # phonon check (~3 min)
+~/.sto-envs/mace/bin/python orientations/111/analyse_111.py           # table and Figure 4
+~/.sto-envs/mace/bin/python orientations/110/scan_110.py              # [110] relaxations (~1 h)
+~/.sto-envs/mace/bin/python orientations/110/phonons_110.py           # phonon check (~3 min)
+~/.sto-envs/mace/bin/python orientations/110/analyse_110.py           # table and Figure 5
+~/.sto-envs/mace/bin/python orientations/rule/orientation_rule.py     # orientation rule table
+~/.sto-envs/mace/bin/python orientations/rule/orientation_rule.py fig # Figure 6
 ```
 
 ## Licence

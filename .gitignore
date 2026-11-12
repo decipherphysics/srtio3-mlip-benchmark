@@ -16,6 +16,7 @@ results/relax/old_*/
 results/singlepoints/
 results/smoke/
 results/finetune/
+orientations/*/results_dryrun*/
 
 # fine-tuning, not part of this study
 notebooks/

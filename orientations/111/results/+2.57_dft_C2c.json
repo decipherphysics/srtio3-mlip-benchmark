@@ -1,0 +1,42 @@
+{
+ "model": "mace-mh-1-r2scan",
+ "orientation": "111",
+ "strain_pct": 2.572,
+ "seed": "dft_C2c",
+ "a_target": 4.01905487053183,
+ "a0_model": 3.9182767914555923,
+ "n_fu": 12,
+ "natoms": 60,
+ "energy": -757.4163651454812,
+ "e_per_fu": -63.1180304287901,
+ "converged": true,
+ "nsteps": 24,
+ "seconds": 19.535398960113525,
+ "fmax_final": 0.0016255519322899642,
+ "dft_path": "C2c/4.0",
+ "dft_e_per_fu": -41.844165,
+ "dft_converged": false,
+ "ti_disp": 8.073838568174801e-06,
+ "ti_normal": 1.4736632109879633e-06,
+ "ti_inplane": 7.938210501462377e-06,
+ "ti_inplane_angle": 1.2879947342351699,
+ "tilt_total": 3.740089842036057,
+ "tilt_normal": 3.740089765695843,
+ "tilt_inplane": 0.0007556709031039684,
+ "tilt_inplane_angle": 29.949353084775993,
+ "rot": [
+  2.220951646620455,
+  2.2209507158002686,
+  2.2196454603614444
+ ],
+ "phases": "---",
+ "inphase": false,
+ "a_inplane": 4.01905487053183,
+ "vol_per_fu": 62.289971984723735,
+ "c_over_a": 0.9595029826837049,
+ "cube_axis_stretch_pct": [
+  296.54222908872464,
+  296.5422289734812,
+  296.5787268347237
+ ]
+}
