@@ -10,27 +10,28 @@ those results are a prediction. All calculations are at 0 K.
 ![Polar energy lowering of unstrained STO for each model and DFT](figures/fig0_summary_001.png)
 
 Polar energy lowering of unstrained STO (the lowest non-polar phase minus the lowest polar phase), each model at its
-own cubic lattice parameter, against DFT (black line). The dash-dot line marks 2 meV/f.u., the estimated scale of
-quantum fluctuations.
+own cubic lattice parameter, against PBEsol DFT (black line). The dash-dot line marks 2 meV/f.u., a rough estimate of
+the scale of quantum fluctuations, not a threshold for ferroelectricity (see Background).
 
-1. Most of the models trained on PBE data make STO far too polar. Without strain, 8 of the 9 lower their energy by
-   3.6-12.4 meV/f.u. on going polar, compared with 1.2 meV/f.u. in DFT, so they would predict unstrained STO to be
-   ferroelectric.
+1. Most of the models trained on PBE data make STO much more polar than PBEsol DFT does. Without strain, 8 of the 9
+   lower their energy by 3.6-12.4 meV/f.u. on going polar, compared with 1.2 meV/f.u. in DFT. This is a comparison
+   with PBEsol, not with experiment, and PBEsol is not exact for this instability (see Background).
 2. The functional of the training data matters more than the architecture. The MH-1 MACE model lowers its energy by
    12.4 meV/f.u. with its PBE head, but only 0.35 meV/f.u. with its r2SCAN head.
 3. Most models still find the DFT phase sequence under strain (I4cm under compression, Cc near zero strain and Ima2
    under tension), and three of them match DFT at all nine strains.
 4. Two of the relaxed polar ground states were saddle points, which only the phonons revealed.
 
-Since the DFT reference uses PBEsol, part of the excess polarisation of the PBE-trained models may come from PBE itself
-(see Limitations).
+Since the DFT reference uses PBEsol, part of the difference between the PBE-trained models and DFT may come from PBE
+itself (see Limitations).
 
 For films grown along other directions, using the best model:
 
 5. The best model also works for [111] strain. It finds the same kind of structure as DFT at all nine strains. Under
    tensile strain the film becomes polar, with an energy lowering within 4% of DFT. Under compressive strain neither
-   the model nor DFT becomes polar, and the oxygen octahedra only tilt, by 1.0-1.4° less in the model. This matches an
-   earlier DFT study of [111] strained STO.
+   the model nor DFT becomes polar, and the oxygen octahedra only tilt. This matches an earlier DFT study of [111]
+   strained STO. The model's tilts are 1.0-1.4° smaller than in PBEsol DFT, most likely because PBEsol overestimates
+   these tilts (see Background).
 6. For [110] strain, where there is no DFT, the model predicts that the film does not become polar under compressive
    strain (apart from a very weak polarisation at the largest strain), and becomes polar within the film plane under
    tensile strain, with about half the energy lowering of a [001] film.
@@ -41,13 +42,20 @@ For films grown along other directions, using the best model:
 
 ## Background
 
-STO has an extremely flat energy landscape, sitting on the verge of several polar and non-polar phases. In DFT the
-unstrained ground state is polar, but only marginally (1.2 meV/f.u. below the lowest non-polar phase here), and
-experimentally STO remains paraelectric down to the lowest temperatures due to quantum fluctuations, estimated at
-roughly 2 meV/f.u. (Watanabe, PRB 99, 064107 (2019)). Epitaxial strain stabilises the polar phases, and strained STO
-films can be ferroelectric at room temperature (Haeni et al., Nature 430, 758 (2004)). Since these energy differences
-are only a few meV/f.u., with octahedral tilting competing with the polar mode, strained STO makes a good test of how
-well MLIPs trained across the periodic table capture the finer features of an energy landscape.
+STO has an extremely flat energy landscape, sitting on the verge of several polar and non-polar phases. In PBEsol DFT
+the unstrained ground state is polar, but only marginally (1.2 meV/f.u. below the lowest non-polar phase here), while
+experimentally STO remains paraelectric down to the lowest temperatures because of quantum fluctuations of the ions.
+Their scale has been estimated at roughly 2 meV/f.u. (Watanabe, PRB 99, 064107 (2019)), but this is a rough guide, not
+a threshold: whether a polar well survives them depends on its shape as well as its depth. A study using the random
+phase approximation (RPA), which describes this instability better than PBEsol, finds a polar energy barrier of almost
+7 meV/f.u., against less than 0.5 meV/f.u. with PBEsol along the same modes, and still finds STO paraelectric once the
+quantum motion of the ions is included (Verdi et al., Phys. Rev. Materials 7, L030801 (2023)). PBEsol also
+overestimates the octahedral tilt of unstrained STO, at 5.64° against 2.1° measured at 4.2 K, where SCAN gives 2.4°
+and HSE06 2.5° (Begum, Gruner and Pentcheva, Phys. Rev. Materials 3, 065004 (2019)). Epitaxial strain stabilises the
+polar phases, and strained STO films can be ferroelectric at room temperature (Haeni et al., Nature 430, 758 (2004)).
+Since these energy differences are only a few meV/f.u., with octahedral tilting competing with the polar mode, strained
+STO makes a good test of how well MLIPs trained across the periodic table capture the finer features of an energy
+landscape.
 
 ## Method
 
@@ -65,12 +73,13 @@ model run through its own package.
 
 ### 1. Do the models reproduce the polar instability of STO?
 
-We find that most of the PBE-trained models make STO far too polar. Without strain, 8 of the 9 lower their energy by
-3.6-12.4 meV/f.u. on going polar, compared with 1.2 meV/f.u. in DFT, and displace Ti by 0.12-0.18 Å rather than
-0.08 Å. In DFT the polar energy lowering first exceeds 2 meV/f.u. somewhere between 1.3 and 2.6% compressive strain,
-and between 0 and 1.3% tensile strain, whereas in these eight models it exceeds this at every strain, so they would
-predict unstrained STO to be ferroelectric. The cubic soft polar mode is also too unstable in all nine (-94 to
--155 cm-1, compared with -75 cm-1 from DFPT).
+We find that most of the PBE-trained models make STO much more polar than PBEsol DFT does. Without strain, 8 of the 9
+lower their energy by 3.6-12.4 meV/f.u. on going polar, compared with 1.2 meV/f.u. in DFT, and displace Ti by
+0.12-0.18 Å rather than 0.08 Å. In DFT the polar energy lowering first exceeds 2 meV/f.u. somewhere between 1.3 and
+2.6% compressive strain, and between 0 and 1.3% tensile strain, whereas in these eight models it exceeds this at every
+strain. The cubic soft polar mode is also more unstable in all nine (-94 to -155 cm-1, compared with -75 cm-1 from
+DFPT). This comparison cannot say whether they are wrong about real STO: the 2 meV/f.u. line is only a rough scale, and
+the RPA gives a deeper polar well than PBEsol does (see Background).
 
 ### 2. Does the functional of the training data matter?
 
@@ -115,7 +124,7 @@ negative values are imaginary (unstable).
 ![Polar energy lowering against strain](figures/fig1_gain_001.png)
 
 Figure 1: Polar energy lowering against strain for each model (blue) and DFT (grey). The dotted and dash-dot lines
-mark 0.1 meV/f.u. (the numerical threshold) and 2 meV/f.u. (the estimated scale of quantum fluctuations).
+mark 0.1 meV/f.u. (the numerical threshold) and 2 meV/f.u. (a rough estimate of the scale of quantum fluctuations).
 
 ![Ground state phase at each strain](figures/fig4_phases_001.png)
 
@@ -147,7 +156,9 @@ from the model's axis, so this difference is not settled. Without strain both fi
 (0.33 meV/f.u. below the lowest non-polar phase, against 0.58 meV/f.u. in DFT). In the tensile regime both find the
 polar Cc phase, with Ti moving mostly within the film plane. The energy lowering is within 4% of DFT at every tensile
 strain (71.1 against 71.5 meV/f.u. at +5.1%) and the Ti off-centring within 0.007 Å. As for [001], the model's tilts
-are smaller than in DFT, by 1.0-1.4° in the compressive regime. None of the model's ground states is a saddle point.
+are smaller than in DFT, by 1.0-1.4° in the compressive regime. Since PBEsol overestimates the tilts of STO by more
+than a factor of two (see Background) and the model is trained on r2SCAN data, this difference most likely comes from
+the functional rather than from the model. None of the model's ground states is a saddle point.
 
 These results agree with an earlier DFT study (Reyes-Lillo, Rabe and Neaton, Phys. Rev. Materials 3, 030601 (2019)),
 which also finds [111] strained STO non-polar under compressive strain and polar, in the Cc phase, under larger
@@ -160,8 +171,9 @@ In the compressive regime the film is non-polar (Figure 5), with the octahedra t
 at -5.1%). In the tensile regime it becomes polar (Cc), with Ti moving within the film plane at about 40° to [001],
 and an energy lowering about half that of a [001] film at the same strain (84 against 156 meV/f.u. at +5.1%). From the
 [001] and [111] comparisons, we expect the kind of structure to be right, the energy lowering under tensile strain to
-be within about 10% and the tilts up to about 2° too small. Since the model overestimates the energy lowering under
-compressive [001] strain by 30-51%, the weak polarisation at -5.1% may well be absent in DFT.
+be within about 10% of PBEsol and the tilts up to about 2° smaller than PBEsol would give. Since the model's energy
+lowering under compressive [001] strain is 30-51% above PBEsol's, the weak polarisation at -5.1% may well be absent in
+PBEsol DFT.
 
 The only DFT study of [110] strained STO we found (Angsten, Martin and Asta, Phys. Rev. B 95, 174110 (2017)) uses
 five-atom cells, which leave out the octahedral tilts. It also finds polarisation within the film plane under tensile
@@ -179,8 +191,9 @@ while compressive [001] strain lengthens the bonds along the growth direction, s
 tensile [111] strain each bond lengthens by only about half the strain of the film, so the energy lowering is less
 than half that of [001] (38-47%). For [111] the energy lowering lies between 22% below and 25% above the rule, and for
 [110] within 5% of it. In the compressive [001] regime, however, DFT lies 15-44% below the rule while the model
-follows it to within 11%, which is the likely reason the model overestimates the energy lowering there: in DFT the
-larger octahedral tilts compete with the polarisation.
+follows it to within 11%, which is the likely reason the model's energy lowering is higher there: in DFT the larger
+octahedral tilts compete with the polarisation. Since PBEsol overestimates these tilts, the competition in real STO
+may be weaker than in DFT.
 
 ![Phases of [111] strained STO, model against DFT](figures/fig_phases_111.png)
 
@@ -202,10 +215,14 @@ against strain in the model, for each orientation.
 
 ## Limitations
 
-The DFT reference uses PBEsol, while the models are trained on PBE or r2SCAN data, so part of the excess polarisation
-of the PBE-trained models may come from PBE itself rather than from the models, which this comparison cannot separate.
-All calculations are at 0 K, with quantum fluctuations only included through the rough 2 meV/f.u. estimate, and the
-[001] comparison uses nine strains 1.3% apart in a 20-atom cell. The [111] and [110] calculations use only the best
+The DFT reference uses PBEsol, while the models are trained on PBE or r2SCAN data, so part of the difference between
+the PBE-trained models and DFT may come from PBE itself rather than from the models, which this comparison cannot
+separate. PBEsol is not exact for STO either: it overestimates the octahedral tilt by more than a factor of two, and
+the RPA gives a much deeper polar well (see Background). The comparison therefore measures agreement with PBEsol, not
+with experiment, and where the r2SCAN-trained models tilt the octahedra less than DFT, they may well be closer to
+experiment. All calculations are at 0 K, with quantum fluctuations only included through the rough 2 meV/f.u.
+estimate, which is not a threshold for ferroelectricity, and the [001] comparison uses nine strains 1.3% apart in a
+20-atom cell. The [111] and [110] calculations use only the best
 model, and the [110] results have no DFT check. Under compressive [111] strain no DFT run tried the model's tilt axis,
 so which axis DFT prefers is not known.
 
@@ -284,6 +301,16 @@ The [111] and [110] calculations and the orientation rule use the `mace` environ
 ~/.sto-envs/mace/bin/python orientations/rule/orientation_rule.py     # orientation rule table
 ~/.sto-envs/mace/bin/python orientations/rule/orientation_rule.py fig # Figure 6
 ```
+
+## Versions
+
+- 1.2 (17 November 2026): corrected three statements that went further than a comparison with PBEsol can. The
+  PBE-trained models are now described as more polar than PBEsol DFT rather than as too polar, the 2 meV/f.u. line is
+  no longer read as a threshold for ferroelectricity, and the best model's smaller tilts are put down, most likely, to
+  PBEsol rather than to the model. The Background and Limitations now give the known errors of PBEsol for STO. No
+  calculation, figure or table changed.
+- 1.1 (12 November 2026): [111] strain against DFT, [110] strain (a prediction) and the orientation rule.
+- 1.0 (4 November 2026): the [001] comparison of 11 foundation MLIPs with PBEsol DFT.
 
 ## Licence
 
